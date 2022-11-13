@@ -16,30 +16,32 @@ class SlotSeeder extends Seeder
      */
     public function run()
     {
-        $schedules = Schedule::where('status',1)->whereDate('date','2022-11-14')->get();
+        $schedules = Schedule::where('status',1)->get();
         if (!empty($schedules)){
             $slots = [];
             $start_time = null;
             foreach ($schedules as $schedule){
-                $start_time = $schedule->opening_time;
-                $end_time = Carbon::parse($schedule->opening_time)->addMinutes($schedule->slot_duration)->format('H:i:s');
-                while(!empty($start_time)){
-                    $slots[] = [
-                        'schedule_id'   => $schedule->schedule_id,
-                        'start_time'    => $start_time,
-                        'end_time'      => $end_time,
-                        'status'        => 'Available'
-                    ];
-                    if ($end_time < $schedule->closing_time){
-                        $start_time = Carbon::parse($end_time)->addMinutes($schedule->buffer_time)->format('H:i:s');
-                        $end_time = Carbon::parse($schedule->opening_time)->addMinutes($schedule->slot_duration)->format('H:i:s');
-                    }else{
-                        $start_time = null;
-                        $end_time = null;
+                $start_time = Carbon::parse($schedule->opening_time)->format('H:i');
+                $end_time = Carbon::parse($schedule->closing_time)->format('H:i');
+                while (strtotime($start_time) <= strtotime($end_time)){
+                    $start = $start_time;
+                    $end = Carbon::parse($start_time)->addMinutes($schedule->slot_duration)->format('H:i');
+                    $start_time = Carbon::parse($start_time)->addMinutes($schedule->slot_duration+$schedule->buffer_time)->format('H:i');
+                    if (strtotime($start_time) <= strtotime($end_time)){
+                        $slots[] = [
+                            'schedule_id'   => $schedule->schedule_id,
+                            'start_time'    => $start,
+                            'end_time'      => $end,
+                            'status'        => 'Available',
+                            'created_at'    => Carbon::now(),
+                            'updated_at'    => Carbon::now()
+                        ];
                     }
                 }
             }
-            Slot::insert($slots);
+            if (!empty($slots)){
+                Slot::insert($slots);
+            }
         }
     }
 }

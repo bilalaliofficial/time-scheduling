@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call([
-            ScheduleType::class
+            ScheduleType::class,
+            ScheduleSeeder::class,
+            BreakSeeder::class,
+            SlotSeeder::class
         ]);
     }
 }
