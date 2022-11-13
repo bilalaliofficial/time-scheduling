@@ -59,6 +59,7 @@ class AppointmentController extends Controller
             for ($i=0;$i<$request->input('number_persons');$i++){
                 $appointments[] = $data;
             }
+
             if (!empty($appointments)){
                 Appointment::insert($appointments);
                 $appointment_count = Appointment::where(['slot_id'=>$request->input('slot_id'),'status'=>'Booked'])->count();

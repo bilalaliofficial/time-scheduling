@@ -16,7 +16,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $schedules = Schedule::whereDate('date','>',Carbon::now()->format('Y-m-d'))->get();
+        $schedules = Schedule::whereDate('date','>',Carbon::now()->format('Y-m-d'))->limit(7)->get();
         if (!empty($schedules)){
             $data = new ScheduleCollection($schedules);
             return response()->json(['data' => $data], 200);
