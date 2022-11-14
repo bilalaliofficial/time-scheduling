@@ -5,16 +5,18 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class ScheduleTest extends TestCase
 {
     /**
      * A basic test example.
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testSchedulesTest()
     {
-        $response = $this->get('/');
+        $this->withExceptionHandling();
+
+        $response = $this->getJson('/api/schedules');
 
         $response->assertStatus(200);
     }
