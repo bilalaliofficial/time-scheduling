@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\ScheduleType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $this->call([
-            ScheduleType::class,
+            ScheduleTypeSeeder::class,
             ScheduleSeeder::class,
             BreakSeeder::class,
             SlotSeeder::class
